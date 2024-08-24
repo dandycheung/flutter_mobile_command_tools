@@ -1,16 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_mobile_command_tools/constants.dart';
-import 'package:flutter_mobile_command_tools/model/text_field_model.dart';
-import 'package:flutter_mobile_command_tools/utils/LogUtils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_mobile_command_tools/notifier/center_widget_change_notifier.dart';
 import 'package:flutter_mobile_command_tools/widgets/log_widget.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:provider/provider.dart';
 
 class MacosMainRightPage extends StatefulWidget {
   final Widget centerWidget;
-  final TextFieldModel textFieldModel;
 
-  const MacosMainRightPage(this.centerWidget, this.textFieldModel, {Key? key})
-      : super(key: key);
+  const MacosMainRightPage(this.centerWidget, {Key? key}) : super(key: key);
 
   @override
   State<MacosMainRightPage> createState() => _MacosMainRightPageState();
@@ -19,64 +16,55 @@ class MacosMainRightPage extends StatefulWidget {
 class _MacosMainRightPageState extends State<MacosMainRightPage> {
   @override
   Widget build(BuildContext context) {
-    return MacosScaffold(
-      toolBar: ToolBar(
-        title: const Text(Constants.APP_NAME),
-        leading: MacosTooltip(
-          message: 'Toggle Sidebar',
-          useMousePosition: false,
-          child: MacosIconButton(
-            icon: MacosIcon(
-              CupertinoIcons.sidebar_left,
-              color: MacosTheme.brightnessOf(context).resolve(
-                const Color.fromRGBO(0, 0, 0, 0.5),
-                const Color.fromRGBO(255, 255, 255, 0.5),
-              ),
-              size: 20.0,
-            ),
-            boxConstraints: const BoxConstraints(
-              minHeight: 20,
-              minWidth: 20,
-              maxWidth: 48,
-              maxHeight: 38,
-            ),
-            onPressed: () => MacosWindowScope.of(context).toggleSidebar(),
-          ),
-        ),
-      ),
-      children: [
-        // ResizablePane(
-        //   minSize: 180,
-        //   startSize: 200,
-        //   windowBreakpoint: 700,
-        //   resizableSide: ResizableSide.right,
-        //   builder: (_, __) {
-        //     return widget.centerWidget;
-        //   },
-        // ),
-        ContentArea(
-          builder: (_, __) {
+    return ChangeNotifierProvider(
+      create: (_) => CenterWidgetChangeNotifier(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Consumer(builder: (BuildContext context,
+              CenterWidgetChangeNotifier notifier, Widget? child) {
             return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 200,
+                  width: notifier.centerWidth,
                   margin: EdgeInsets.all(10),
                   child: widget.centerWidget,
                 ),
-                Expanded(child: LogWidget())
+                GestureDetector(
+                  onTapDown: (details) {
+                    notifier.isClick = true;
+                  },
+                  onHorizontalDragUpdate: (details) {
+                    print(
+                        "onHorizontalDragUpdate---${details.globalPosition}---${details.localPosition}---${details.delta}");
+                    // setState(() {
+                    //   _left += details.delta.dx;
+                    // });
+                    notifier.centerWidth += details.delta.dx;
+                  },
+                  onHorizontalDragEnd: (details) {
+                    notifier.isClick = false;
+                  },
+                  child: MouseRegion(
+                      cursor: SystemMouseCursors.resizeLeftRight, // 手指光标
+                      child: Row(
+                        children: [
+                          Container(
+                            child: Column(),
+                            width: 1,
+                            color: notifier.isClick
+                                ? MacosColors.linkColor
+                                : MacosColors.quaternaryLabelColor,
+                          )
+                        ],
+                      )),
+                ),
               ],
             );
-          },
-        ),
-        // const ResizablePane.noScrollBar(
-        //   minSize: 180,
-        //   startSize: 200,
-        //   windowBreakpoint: 700,
-        //   resizableSide: ResizableSide.right,
-        //   child: Center(child: Text('Right non-scrollable Resizable Pane')),
-        // ),
-      ],
+          }),
+          Expanded(child: LogWidget())
+        ],
+      ),
     );
   }
 }

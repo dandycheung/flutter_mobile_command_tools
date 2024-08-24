@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_mobile_command_tools/base/base_command.dart';
 import 'package:flutter_mobile_command_tools/constants.dart';
+import 'package:flutter_mobile_command_tools/enum/adb_command_type.dart';
 import 'package:flutter_mobile_command_tools/model/command_result_model.dart';
 import 'package:flutter_mobile_command_tools/utils/LogUtils.dart';
 import 'package:flutter_mobile_command_tools/utils/PlatformUtils.dart';
@@ -125,6 +126,37 @@ class AdbCommand extends BaseCommand {
           if (values[i].contains("error:")) {
             return CommandResultModel(false, values[i]);
           }
+        }
+        return CommandResultModel(false, "无信息");
+      case Constants.ADB_CURRENT_FRAGMENT:
+        List<String> values = data.split('\n');
+        bool isVisibleFragment = false;
+        List<String> listFragment = [];
+        for (int i = values.length - 1; i > 0; i--) {
+          //处理9.0版本手机顶级activity信息过滤改为mResumedActivity
+          if (values[i].contains("mHidden=false")) {
+            isVisibleFragment = true;
+          }
+
+          if (!isVisibleFragment) {
+            continue;
+          }
+          if (values[i].contains("id=") &&
+              values[i].contains("Fragment") &&
+              !values[i].contains("#")) {
+            print(values[i]);
+            List<String> listActivity = values[i].split(" ");
+            listActivity.removeWhere((e) => e.isEmpty);
+            listFragment.add(
+                listActivity[0].substring(0, listActivity[0].indexOf("{")));
+            isVisibleFragment = false;
+          }
+          if (values[i].contains("error:")) {
+            return CommandResultModel(false, values[i]);
+          }
+        }
+        if (listFragment.isNotEmpty) {
+          return CommandResultModel(true, listFragment.join("->"));
         }
         return CommandResultModel(false, "无信息");
       case Constants.ADB_IP:

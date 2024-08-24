@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_mobile_command_tools/constants.dart';
@@ -41,7 +40,7 @@ class MainWidget extends StatelessWidget {
       title: Constants.APP_NAME,
       navigatorKey: Global.navigatorKey,
 
-      themeMode: ThemeMode.dark,
+      ///themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       home: MainMacosWidget(),
     );
