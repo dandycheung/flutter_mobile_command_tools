@@ -4,16 +4,16 @@ import 'package:flutter_mobile_command_tools/widgets/log_widget.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 
-class MacosMainRightPage extends StatefulWidget {
+class MainRightPage extends StatefulWidget {
   final Widget centerWidget;
 
-  const MacosMainRightPage(this.centerWidget, {Key? key}) : super(key: key);
+  const MainRightPage(this.centerWidget, {Key? key}) : super(key: key);
 
   @override
-  State<MacosMainRightPage> createState() => _MacosMainRightPageState();
+  State<MainRightPage> createState() => _MainRightPageState();
 }
 
-class _MacosMainRightPageState extends State<MacosMainRightPage> {
+class _MainRightPageState extends State<MainRightPage> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -35,11 +35,6 @@ class _MacosMainRightPageState extends State<MacosMainRightPage> {
                     notifier.isClick = true;
                   },
                   onHorizontalDragUpdate: (details) {
-                    print(
-                        "onHorizontalDragUpdate---${details.globalPosition}---${details.localPosition}---${details.delta}");
-                    // setState(() {
-                    //   _left += details.delta.dx;
-                    // });
                     notifier.centerWidth += details.delta.dx;
                   },
                   onHorizontalDragEnd: (details) {
@@ -51,7 +46,7 @@ class _MacosMainRightPageState extends State<MacosMainRightPage> {
                         children: [
                           Container(
                             child: Column(),
-                            width: 1,
+                            width: 2,
                             color: notifier.isClick
                                 ? MacosColors.linkColor
                                 : MacosColors.quaternaryLabelColor,

@@ -1,4 +1,6 @@
-import 'package:flutter/widgets.dart';
+import 'dart:io';
+
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 class ButtonWidget extends StatelessWidget {
@@ -9,13 +11,19 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PushButton(
-      child: Text(buttonText),
-      controlSize: ControlSize.large,
-      onPressed: () {
-        onTap.call();
-      },
-    );
+    return Platform.isMacOS
+        ? PushButton(
+            child: Text(buttonText),
+            controlSize: ControlSize.large,
+            onPressed: () {
+              onTap.call();
+            },
+          )
+        : Button(
+            child: Text(buttonText),
+            onPressed: () {
+              onTap.call();
+            });
   }
 }
 
