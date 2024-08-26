@@ -88,8 +88,10 @@ class Constants {
   static const String ADB_START_SERVICE = "shell am startservice -n ";
   static const String ADB_STOP_SERVICE = "shell am stopservice -n ";
 
-  static const String ADB_CURRENT_ACTIVITY = "shell dumpsys  activity";
-  static const String ADB_CURRENT_FRAGMENT = "shell dumpsys  activity top com.mld.LanTin";
+  static const String ADB_CURRENT_ACTIVITY =
+      "shell dumpsys window | grep mCurrentFocus";
+  static const String ADB_CURRENT_FRAGMENT =
+      "shell dumpsys  activity top com.mld.LanTin";
   static const String ADB_CLEAR_DATA = "shell pm clear";
   static const String ADB_SCREEN_SHOT =
       "shell screencap -p /sdcard/" + Constants.SCREEN_SHOOT_NAME;

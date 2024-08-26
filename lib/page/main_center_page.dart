@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobile_command_tools/command/adb_command.dart';
+import 'package:flutter_mobile_command_tools/command/adb_run_command.dart';
 import 'package:flutter_mobile_command_tools/notifier/devices_notifier.dart';
+import 'package:flutter_mobile_command_tools/utils/command_utils.dart';
 import 'package:provider/provider.dart';
-import '../constants.dart';
 import '../widgets/button_widget.dart';
 import 'package:fluent_ui/src/controls/utils/divider.dart' as ListDivide;
 
@@ -21,9 +19,9 @@ class DeviceCenterPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: ButtonWidget('获取所有设备', () {
-                    AdbCommand command = AdbCommand();
+                    AdbRunCommand command = AdbRunCommand();
                     command
-                        .runCommand(Constants.ADB_CONNECT_DEVICES)
+                        .runCommand(CommandUtils.getAndroidDevices())
                         .then((value) {
                       if (value.data is List) {
                         if (value.data.length != 0) {
@@ -86,16 +84,12 @@ class DeviceCommandPage extends StatelessWidget {
     return Column(
       children: [
         ButtonWidget('当前Activity', () {
-          ///context.read<LogChangeNotifier>().addLog("Hello,World");
-
-          AdbCommand command = AdbCommand();
-          command.runCommand(Constants.ADB_CURRENT_ACTIVITY);
+          AdbRunCommand command = AdbRunCommand();
+          command.runCommand(CommandUtils.getCurrentActivity());
         }),
         ButtonWidget('当前Fragment', () {
-          ///context.read<LogChangeNotifier>().addLog("Hello,World");
-
-          AdbCommand command = AdbCommand();
-          command.runCommand(Constants.ADB_CURRENT_FRAGMENT);
+          AdbRunCommand command = AdbRunCommand();
+          command.runCommand(CommandUtils.getCurrentFragment());
         }),
       ],
     );

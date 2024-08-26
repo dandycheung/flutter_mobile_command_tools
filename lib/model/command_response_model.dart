@@ -1,8 +1,8 @@
-class CommandResultModel {
+class CommandResponseModel {
   bool isSuccess = false;
   dynamic data;
 
-  CommandResultModel(this.isSuccess, this.data);
+  CommandResponseModel(this.isSuccess, this.data);
 
   @override
   String toString() {

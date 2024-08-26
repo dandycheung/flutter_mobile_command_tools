@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_mobile_command_tools/utils/PlatformUtils.dart';
+import 'package:flutter_mobile_command_tools/utils/platform_utils.dart';
 
 import '../constants.dart';
 import 'FileUtils.dart';
