@@ -10,7 +10,6 @@ import 'package:flutter_mobile_command_tools/utils/init_utils.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_acrylic/flutter_acrylic.dart';
 
 Future<void> _configureMacosWindowUtils() async {
   const config = MacosWindowUtilsConfig();
@@ -52,29 +51,28 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return !Platform.isMacOS
-        ? FluentApp(
-            title: Constants.APP_NAME,
-            navigatorKey: Global.navigatorKey,
-            themeMode: appTheme.mode,
-            debugShowCheckedModeBanner: false,
-            color: appTheme.color,
-            theme: FluentThemeData(
-              accentColor: appTheme.color,
-              visualDensity: VisualDensity.standard,
-              focusTheme: FocusThemeData(
-                glowFactor: is10footScreen(context) ? 2.0 : 0.0,
-              ),
-            ),
-            home: MainPage(),
-          )
-        : MacosApp(
-            title: Constants.APP_NAME,
-            navigatorKey: Global.navigatorKey,
+    return DesktopApp();
+  }
+}
 
-            ///themeMode: ThemeMode.dark,
-            debugShowCheckedModeBanner: false,
-            home: MainPage(),
-          );
+class DesktopApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (Platform.isMacOS) {
+      return MacosApp(
+        title: Constants.APP_NAME,
+        navigatorKey: Global.navigatorKey,
+        themeMode: ThemeMode.dark,
+        debugShowCheckedModeBanner: false,
+        home: MainPage(),
+      );
+    } else {
+      return FluentApp(
+        title: Constants.APP_NAME,
+        navigatorKey: Global.navigatorKey,
+        debugShowCheckedModeBanner: false,
+        home: MainPage(),
+      );
+    }
   }
 }

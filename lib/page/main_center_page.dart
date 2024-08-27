@@ -4,12 +4,18 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobile_command_tools/command/adb_command.dart';
 import 'package:flutter_mobile_command_tools/notifier/devices_notifier.dart';
+import 'package:flutter_mobile_command_tools/theme.dart';
+import 'package:flutter_mobile_command_tools/widgets/hover_widget.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../widgets/button_widget.dart';
 import 'package:fluent_ui/src/controls/utils/divider.dart' as ListDivide;
 
+import '../widgets/vertical_app_bar.dart';
+
 class DeviceCenterPage extends StatelessWidget {
+  AppTheme appTheme = AppTheme();
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -44,27 +50,27 @@ class DeviceCenterPage extends StatelessWidget {
                   DevicesChangeNotifier devices, Widget? child) {
                 return ListView.separated(
                   itemBuilder: (context, index) {
-                    return MouseRegion(
-                        // cursor: MouseCursor.uncontrolled,
-                        cursor: SystemMouseCursors.click,
-                        opaque: false,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Stack(
-                              children: [
-                                Text(devices.deviceList[index]),
-                                Visibility(
-                                  child: Positioned(
-                                    child: Icon(Icons.check),
-                                    right: 0,
-                                  ),
-                                  visible: devices.checkDeviceList[index],
-                                )
-                              ],
-                            ))
-                          ],
-                        ));
+                    return HoverWidget(
+                      hoverEnterColor: VerticalTabs.color,
+                      hoverExitColor: VerticalTabs.defaultColor,
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Stack(
+                                children: [
+                                  Text(devices.deviceList[index]),
+                                  Visibility(
+                                    child: Positioned(
+                                      child: Icon(Icons.check),
+                                      right: 0,
+                                    ),
+                                    visible: devices.checkDeviceList[index],
+                                  )
+                                ],
+                              ))
+                        ],
+                      ),
+                    );
                   },
                   itemCount: devices.deviceList.length,
                   separatorBuilder: (BuildContext context, int index) {

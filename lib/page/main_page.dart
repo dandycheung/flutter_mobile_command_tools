@@ -8,6 +8,8 @@ import 'package:flutter_mobile_command_tools/notifier/center_widget_change_notif
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import '../platform_menus.dart';
+import '../widgets/hover_widget.dart';
+import '../widgets/vertical_app_bar.dart';
 import 'main_right_page.dart';
 import 'main_center_page.dart';
 
@@ -50,23 +52,37 @@ class _MainPageState extends State<MainPage> with MixinMain {
     return NavigationView(
         content: ChangeNotifierProvider<CenterWidgetChangeNotifier>(
       create: (_) => CenterWidgetChangeNotifier(),
-      child: Row(
-        children: [
-          NavigationRail(
-            minWidth: 50,
-            backgroundColor:
-                MacosColors.controlBackgroundColor.withOpacity(0.8),
-            onDestinationSelected: _onDestinationSelected,
-            elevation: 2,
-            destinations: destinations,
-            selectedIndex: pageIndex,
+      child: VerticalTabs(
+        initialIndex: pageIndex,
+        tabs: [
+          HoverWidget(
+            hoverEnterColor: VerticalTabs.color,
+            hoverExitColor: VerticalTabs.defaultColor,
+            child: Icon(
+              CupertinoIcons.device_phone_portrait,
+              size: 15,
+            ),
           ),
-          Expanded(
-              child: [
-            MainRightPage(DeviceCenterPage()),
-            MainRightPage(DeviceCommandPage())
-          ][pageIndex])
+          HoverWidget(
+            hoverEnterColor: VerticalTabs.color,
+            hoverExitColor: VerticalTabs.defaultColor,
+            child: Icon(
+              CupertinoIcons.command,
+              size: 15,
+            ),
+          ),
         ],
+        contents: [
+          MainRightPage(DeviceCenterPage()),
+          MainRightPage(DeviceCommandPage())
+        ],
+        indicatorSide: IndicatorSide.start,
+        tabsWidth: 50,
+        onSelect: (index) {
+          setState(() {
+            pageIndex = index;
+          });
+        },
       ),
     ));
   }
