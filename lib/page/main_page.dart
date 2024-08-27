@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobile_command_tools/mixin/mixin_main.dart';
 import 'package:flutter_mobile_command_tools/notifier/center_widget_change_notifier.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,7 @@ class MainPage extends StatefulWidget {
   }
 }
 
-class _MainPageState extends State<MainPage> with MixinMain {
+class _MainPageState extends State<MainPage>{
   int pageIndex = 0;
 
   @override
@@ -44,13 +43,14 @@ class _MainPageState extends State<MainPage> with MixinMain {
                 ),
               ),
               child: _mainWidget())
-          : _mainWidget(),
+          : NavigationView(
+              content: _mainWidget(),
+            ),
     );
   }
 
   Widget _mainWidget() {
-    return NavigationView(
-        content: ChangeNotifierProvider<CenterWidgetChangeNotifier>(
+    return ChangeNotifierProvider<CenterWidgetChangeNotifier>(
       create: (_) => CenterWidgetChangeNotifier(),
       child: VerticalTabs(
         initialIndex: pageIndex,
@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> with MixinMain {
           });
         },
       ),
-    ));
+    );
   }
 
   final List<NavigationRailDestination> destinations = const [
