@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_mobile_command_tools/notifier/center_widget_change_notifier.dart';
+import 'package:flutter_mobile_command_tools/theme.dart';
+import 'package:flutter_mobile_command_tools/widgets/hover_widget.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import '../platform_menus.dart';
-import '../widgets/hover_widget.dart';
 import '../widgets/vertical_app_bar.dart';
 import 'main_right_page.dart';
 import 'main_center_page.dart';
@@ -19,7 +19,7 @@ class MainPage extends StatefulWidget {
   }
 }
 
-class _MainPageState extends State<MainPage>{
+class _MainPageState extends State<MainPage> {
   int pageIndex = 0;
 
   @override
@@ -55,17 +55,17 @@ class _MainPageState extends State<MainPage>{
       child: VerticalTabs(
         initialIndex: pageIndex,
         tabs: [
-          HoverWidget(
+          HoverIconWidget(
             hoverEnterColor: VerticalTabs.color,
-            hoverExitColor: VerticalTabs.defaultColor,
+            tipsMessage: "设备",
             child: Icon(
               CupertinoIcons.device_phone_portrait,
               size: 15,
             ),
           ),
-          HoverWidget(
+          HoverIconWidget(
             hoverEnterColor: VerticalTabs.color,
-            hoverExitColor: VerticalTabs.defaultColor,
+            tipsMessage: "命令",
             child: Icon(
               CupertinoIcons.command,
               size: 15,
@@ -85,26 +85,5 @@ class _MainPageState extends State<MainPage>{
         },
       ),
     );
-  }
-
-  final List<NavigationRailDestination> destinations = const [
-    NavigationRailDestination(
-        icon: Icon(
-          CupertinoIcons.device_phone_portrait,
-          size: 15,
-        ),
-        label: Text("手机")),
-    NavigationRailDestination(
-        icon: Icon(
-          CupertinoIcons.command,
-          size: 15,
-        ),
-        label: Text("命令")),
-  ];
-
-  void _onDestinationSelected(int value) {
-    setState(() {
-      pageIndex = value;
-    });
   }
 }
